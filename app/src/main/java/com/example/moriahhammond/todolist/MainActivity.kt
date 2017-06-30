@@ -1,25 +1,29 @@
 package com.example.moriahhammond.todolist
 
+import android.database.sqlite.SQLiteDatabase
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.util.Log
-import android.widget.EditText
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.editText
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.verticalLayout
+import android.content.ContentValues
+import android.database.sqlite.SQLiteOpenHelper;
+
 
 class MainActivity : AppCompatActivity() {
 
     //MARK: ivars
     val TAG = "MainActivity"
+    private var mHelper: TaskDbHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mHelper = TaskDbHelper(this);
 
     }
 
@@ -41,9 +45,21 @@ class MainActivity : AppCompatActivity() {
                                 hint = "Enter task"
                             }
                             positiveButton("Add") {
-                                val task = taskEditText.text
                                 toast("Task added")
                                 Log.d(TAG, "Task to add: " + task)
+
+                                val task = taskEditText.text.toString()
+                                val db = mHelper?.getWritableDatabase()
+                                val values = ContentValues()
+
+                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task)
+                                db?.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
+                                        null,
+                                        values,
+                                        SQLiteDatabase.CONFLICT_REPLACE)
+                                db?.close()
+
+
                             }
                             negativeButton("Cancel") {
                                 toast("No task added")
