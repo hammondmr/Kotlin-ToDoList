@@ -105,8 +105,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun deleteTask(view: View) {
-        val parent = view.getParent() as View
-        val taskTextView = findViewById(R.id.task_title) as TextView
+        val parent = view.parent as View
+        val taskTextView = parent.findViewById<View>(R.id.task_title) as TextView
         val task = taskTextView.text.toString()
         val db = mHelper.writableDatabase
         db.delete(TaskContract.TaskEntry.TABLE,
@@ -114,6 +114,5 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(task))
         db.close()
         updateUI()
-        
     }
 }
