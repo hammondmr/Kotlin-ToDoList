@@ -114,5 +114,6 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(task))
         db.close()
         updateUI()
+        
     }
 }
