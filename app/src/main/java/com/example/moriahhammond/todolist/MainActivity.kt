@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val mHelper = TaskDbHelper(this)
         mTaskListView = findViewById(R.id.list_todo) as ListView
+        updateUI()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
